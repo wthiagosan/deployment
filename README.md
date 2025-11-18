@@ -45,29 +45,6 @@ docker build -t api-produtos .
 # 2. Rodar o container injetando as variáveis do arquivo .env
 # A API estará acessível em http://localhost:8000
 docker run -d -p 8000:8000 --env-file .env --name produtos-api api-produtos
-
-🔒 Segurança
-As rotas que modificam dados (POST, PUT, DELETE) são protegidas por um Middleware de Autenticação.
-
-O cliente deve enviar o token de segurança na URL, usando o parâmetro de query token.
-
-Exemplo de requisição POST: POST http://localhost:8000/products/?token=ChaveSecretaDoProjeto2025!XYZ123
-
-📝 Endpoints da API (CRUD)
-A API expõe os seguintes endpoints. A documentação completa (Swagger UI) está disponível em /docs quando a API está rodando.
-
-Modelo de Dados (Produto)
-A API utiliza o seguinte esquema de dados, baseado em Pydantic:
-class ProductBase(BaseModel):
-    nome: str 
-    descricao: str 
-    preco: float 
-    estoque: int
-
-Método,Endpoint,Descrição,Status HTTP de Sucesso,Token Necessário?
-GET,/,Health Check / Status da API.,200 OK,Não
-POST,/products/,CREATE: Cria um novo produto.,201 Created,Sim
-GET,/products/,READ: Lista todos os produtos (até 100).,200 OK,Não
 GET,/products/{id},READ: Retorna um produto pelo seu ObjectId.,200 OK,Não
 PUT,/products/{id},UPDATE: Atualiza campos de um produto.,200 OK,Sim
 DELETE,/products/{id},DELETE: Remove um produto.,204 No Content,Sim
