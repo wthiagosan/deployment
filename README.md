@@ -45,6 +45,3 @@ docker build -t api-produtos .
 # 2. Rodar o container injetando as variáveis do arquivo .env
 # A API estará acessível em http://localhost:8000
 docker run -d -p 8000:8000 --env-file .env --name produtos-api api-produtos
-GET,/products/{id},READ: Retorna um produto pelo seu ObjectId.,200 OK,Não
-PUT,/products/{id},UPDATE: Atualiza campos de um produto.,200 OK,Sim
-DELETE,/products/{id},DELETE: Remove um produto.,204 No Content,Sim
