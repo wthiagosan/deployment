@@ -1,0 +1,14 @@
+# Ignorar arquivos de ambiente local
+.env
+
+# Ignorar diretórios e arquivos Python
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.venv
+venv
+
+# Ignorar arquivos do Docker
+Dockerfile
+.dockerignore
