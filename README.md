@@ -1,0 +1,73 @@
+# 📦 API RESTful CRUD de Produtos
+## Serviço de Gerenciamento de Estoque e Catálogo
+
+Esta API foi desenvolvida para oferecer um conjunto completo de operações **CRUD (Create, Read, Update, Delete)** sobre a entidade `Produto`. Construída para ser rápida, assíncrona e facilmente portável através de contêineres Docker.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+| Componente | Tecnologia | Detalhe |
+| :--- | :--- | :--- |
+| **Linguagem** | Python 3.11 | |
+| **Framework** | **FastAPI** | Framework assíncrono para alto desempenho (ASGI). |
+| **Banco de Dados** | **MongoDB** (Async driver `motor`) | Banco de dados NoSQL para persistência de dados. |
+| **Servidor** | **Uvicorn** | Servidor ASGI utilizado para rodar a aplicação. |
+| **Conteinerização** | **Docker** | Uso de contêiner para garantir ambiente de execução consistente. |
+
+---
+
+## ⚙️ Configuração Local
+
+Para rodar o projeto localmente, você precisará ter o Docker instalado e configurar as variáveis de ambiente.
+
+### 1. Pré-requisitos
+* Docker
+* String de Conexão com o MongoDB (Local ou Atlas).
+
+### 2. Variáveis de Ambiente
+Crie um arquivo `.env` na raiz do projeto, baseado no [.env.example], e preencha-o. Este arquivo é crucial para a API conectar ao banco de dados e aplicar a segurança.
+
+| Variável | Descrição | Exemplo |
+| :--- | :--- | :--- |
+| `MONGO_URL` | URL de conexão com o cluster MongoDB. | `mongodb+srv://<user>:<password>@<cluster-url>/` |
+| `DATABASE_NAME` | Nome do banco de dados a ser utilizado. | `lightsail_db` |
+| `API_TOKEN` | Token de autenticação para operações protegidas. | `ChaveSecretaDoProjeto2025!XYZ123` |
+
+### 3. Execução com Docker
+
+Utilize o Docker para construir a imagem e iniciar o contêiner:
+
+```bash
+# 1. Construir a imagem
+docker build -t api-produtos .
+
+# 2. Rodar o container injetando as variáveis do arquivo .env
+# A API estará acessível em http://localhost:8000
+docker run -d -p 8000:8000 --env-file .env --name produtos-api api-produtos
+
+🔒 Segurança
+As rotas que modificam dados (POST, PUT, DELETE) são protegidas por um Middleware de Autenticação.
+
+O cliente deve enviar o token de segurança na URL, usando o parâmetro de query token.
+
+Exemplo de requisição POST: POST http://localhost:8000/products/?token=ChaveSecretaDoProjeto2025!XYZ123
+
+📝 Endpoints da API (CRUD)
+A API expõe os seguintes endpoints. A documentação completa (Swagger UI) está disponível em /docs quando a API está rodando.
+
+Modelo de Dados (Produto)
+A API utiliza o seguinte esquema de dados, baseado em Pydantic:
+class ProductBase(BaseModel):
+    nome: str 
+    descricao: str 
+    preco: float 
+    estoque: int
+
+Método,Endpoint,Descrição,Status HTTP de Sucesso,Token Necessário?
+GET,/,Health Check / Status da API.,200 OK,Não
+POST,/products/,CREATE: Cria um novo produto.,201 Created,Sim
+GET,/products/,READ: Lista todos os produtos (até 100).,200 OK,Não
+GET,/products/{id},READ: Retorna um produto pelo seu ObjectId.,200 OK,Não
+PUT,/products/{id},UPDATE: Atualiza campos de um produto.,200 OK,Sim
+DELETE,/products/{id},DELETE: Remove um produto.,204 No Content,Sim
